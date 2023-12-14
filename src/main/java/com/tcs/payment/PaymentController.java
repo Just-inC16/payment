@@ -1,5 +1,7 @@
 package com.tcs.payment;
 
+import java.util.Optional;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,8 +26,13 @@ public class PaymentController {
 
 	@GetMapping("/{id}")
 	public ResponseEntity<?> getPaymentById(@PathVariable Long id) {
-		Payment paymentById = paymentRepository.getReferenceById(id);
-		Payment paymentDto = new Payment(paymentById.getId(), paymentById.getCustomerId(), paymentById.getAmount());
-		return ResponseEntity.ok(paymentDto);
+		Optional<Payment> paymentById = paymentRepository.findById(id);
+		if (paymentById.isPresent()) {
+			Payment payment = paymentById.get();
+			Payment paymentDto = new Payment(payment.getId(), payment.getCustomerId(), payment.getAmount());
+			return ResponseEntity.ok(paymentDto);
+		} else {
+			return ResponseEntity.notFound().build();
+		}
 	}
 }
