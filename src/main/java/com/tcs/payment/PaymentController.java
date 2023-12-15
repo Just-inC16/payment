@@ -20,7 +20,7 @@ public class PaymentController {
 	}
 
 	@PostMapping
-	public ResponseEntity<?> makePayment(@RequestBody Payment payment) {
+	public ResponseEntity<Payment> makePayment(@RequestBody Payment payment) {
 		return ResponseEntity.ok(paymentRepository.save(payment));
 	}
 
